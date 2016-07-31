@@ -1,15 +1,17 @@
-# DCOS概念
+# DC/OS概念
 
-Data Center Operation System的概念首次出现自2011年Matei Zaharia等的论文《[The Datacenter Needs an Operating System](http://dl.acm.org/citation.cfm?id=2170461)》
+DC/OS是Data Center Operation System的缩写，首次出现自2011年Matei Zaharia等的论文《[The Datacenter Needs an Operating System](http://dl.acm.org/citation.cfm?id=2170461)》。当时被简称为DCOS，后来为了防止被读作[ds^s]，在中间加了一个斜线。
 
 > By datacenter OS, we mean a software stack providing functionality for the overall datacenter that is analogous to what a traditional OS provides on one machine. We are not calling for a new host OS to be run in datacenters, though such a change may also prove beneficial.
 
 
 ## DC/OS的功能要求
 DC/OS的来源也许还自2009年Google的一篇文章《The Datacenter as a Computer》（2011年出了[第二版](http://web.eecs.umich.edu/~mosharaf/Readings/DC-Computer.pdf)）。
-系统层要求：既要保证每个资源的通用性，又不要损失其独特性。如基于attribute或者tag的方式。
-平台层要求
-应用层要求
+* 系统层要求：既要保证每个资源的通用性，又不要损失其独特性。如基于attribute或者tag的方式。
+* 平台层要求
+这是DC/OS最为
+* 应用层要求
+
 
 ## DC/OS与普通单机OS的区别
 相对于单机的OS（也称Host OS），无论是桌面版或者是服务器版，DC/OS都有显著的区别。首先，在定位上，DC/OS通常是一组分布式的软件，运行在每台服务器本地的操作系统之上，
@@ -28,7 +30,9 @@ DC/OS的来源也许还自2009年Google的一篇文章《The Datacenter as a Com
 
 
 ## DC/OS与Cloud OS的区别
-Data Center更多注重的是主流服务器（commodity server）的管理，而Cloud底层会关注如何将不同的硬件虚拟化成标准或定制的服务器。
+DC/OS与Cloudera OS的区别更多的在功能要求一节中提到的系统层。这里，“Data Center”更多注重的是主流服务器（commodity server）的管理，而“Cloud”底层会关注如何将不同的硬件虚拟化成标准或定制的服务器。
+
+另外的是Cloud更多关心的是计算的弹性，能“无限”的动态增加和减少资源，
 
 devops
 
