@@ -74,6 +74,10 @@ API：要求编程接口尽量简单，屏蔽掉底层如何分布式。虽然�
 ## DC/OS与Cloud OS的区别
 DC/OS与Cloudera OS的区别更多的在功能要求一节中提到的系统层。这里，“Data Center”更多注重的是主流服务器（commodity server）的管理，而“Cloud”底层会关注如何将不同的硬件虚拟化成标准或定制的服务器。
 
+Opentstack独立的machine
+Mesos独立的application
+
+
 另外的是Cloud更多关心的是计算的弹性，能“无限”的动态增加和减少资源，
 
 devops
