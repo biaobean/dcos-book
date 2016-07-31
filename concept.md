@@ -32,6 +32,11 @@ UI
 CLI：通常作为运维和调试用。
 API：要求编程接口尽量简单，屏蔽掉底层如何分布式。虽然这个很难，十年前C++界的大师级人物[Herb Sutter](https://herbsutter.com/about/)就发表了一篇文章《[并发软件的免费午餐结束了](http://www.gotw.ca/publications/concurrency-ddj.htm)》，如何到利用多core、多cpu、多server来进行不同层级的并发，又不将细节暴露给上层接口是一个难点。
 
+服务管理
+服务生命周期管理
+服务发现
+配置管理
+
 安全管理
 存储管理(文件系统)
 系统监控
