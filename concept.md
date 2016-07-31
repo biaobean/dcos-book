@@ -1,6 +1,6 @@
 # DC/OS概念
 
-DC/OS是Data Center Operation System的缩写，首次出现自2011年Matei Zaharia等的论文《[The Datacenter Needs an Operating System](http://dl.acm.org/citation.cfm?id=2170461)》。当时被简称为DCOS，后来为了防止被读作[ds^s]，在中间加了一个斜线。
+DC/OS是Data Center Operation System的缩写，首次出现自2011年Matei Zaharia等的论文《[The Datacenter Needs an Operating System](http://dl.acm.org/citation.cfm?id=2170461)》。当时被简称为DCOS，后来为了防止被读作[di'k^s]，在中间加了一个斜线。
 
 > By datacenter OS, we mean a software stack providing functionality for the overall datacenter that is analogous to what a traditional OS provides on one machine. We are not calling for a new host OS to be run in datacenters, though such a change may also prove beneficial.
 
