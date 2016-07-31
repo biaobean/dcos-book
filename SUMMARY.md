@@ -1,5 +1,5 @@
 # Summary
 
 * [DCOS概念](concept.md)
-* [Mesos与Yarn](mesos_vs_yarn.md)
+* [Mesos与Yarn的对比](mesos_vs_yarn.md)
 
