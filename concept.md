@@ -1,6 +1,10 @@
 # DC/OS概念
 
-DC/OS是Data Center Operation System的缩写，首次出现自2011年Matei Zaharia等的论文《[The Datacenter Needs an Operating System](http://dl.acm.org/citation.cfm?id=2170461)》，灵感也许来自于2009年Google的一篇文章《The Datacenter as a Computer》（2011年出了[第二版](http://web.eecs.umich.edu/~mosharaf/Readings/DC-Computer.pdf)），其目的是让用户就像使用一个现代操作系统来管理单个计算机一样，将数据中心抽象为逻辑上的一台计算机，屏蔽掉底层的细节，并提供一个友好的界面供管理和使用。
+DC/OS是Data Center Operation System的缩写，首次出现自2011年Matei Zaharia等的论文《[The Datacenter Needs an Operating System](http://dl.acm.org/citation.cfm?id=2170461)》，
+
+“Sixty-four cores or 128 cores on a single chip looks a lot like 64 machines or 128 machines in a data center”“We wanted people to be able to program for the data center just like they program for their laptop.”
+
+灵感也许来自于2009年Google的一篇文章《The Datacenter as a Computer》（2011年出了[第二版](http://web.eecs.umich.edu/~mosharaf/Readings/DC-Computer.pdf)），IaaC Infrastructure as a computer 其目的是让用户就像使用一个现代操作系统来管理单个计算机一样，将数据中心抽象为逻辑上的一台计算机，屏蔽掉底层的细节，并提供一个友好的界面供管理和使用。
 
 > By datacenter OS, we mean a software stack providing functionality for the overall datacenter that is analogous to what a traditional OS provides on one machine. We are not calling for a new host OS to be run in datacenters, though such a change may also prove beneficial.
 
@@ -66,6 +70,11 @@ API：要求编程接口尽量简单，屏蔽掉底层如何分布式。虽然�
 * 上层应用：与传统单机用于指定用途不同，数据中心通常承载着各式各样的服务和应用，有的对延时要求高，有的对吞吐要求高。导致通用数据中心平台软件的实现很难为某种应用场景进行特地特别优化。
 
 ### 错误容忍度
+
+> “Everything fails all the time.” —— Werner Vogels, CTO of Amazon
+
+
+
 ### 无宕机运维能力
 
 
