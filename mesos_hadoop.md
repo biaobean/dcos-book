@@ -218,6 +218,479 @@ HDFS_IMAGE_COMPRESSION_CODEC=org.apache.hadoop.io.compress.SnappyCodec
 
 ### YARN支持——Myraid
 Apache的孵化器中有个一个叫Myraid的项目([项目主页]())，
+
+![](mesos/myriad/main.png)
+
+![](mesos/myriad/profile.png)
+
+![](mesos/myriad/task.png)
+
+
+![](mesos/myriad/flex.png)
+
+
+#### 配置文件
+##### Marathon JSON文件示例
+```
+{
+  "mesosMaster": "master.mesos:5050",
+  "checkpoint": false,
+  "containerInfo": {
+    "present": false
+  },
+  "frameworkFailoverTimeout": 60,
+  "frameworkName": "MyriadAlpha",
+  "frameworkRole": "myriad",
+  "frameworkUser": "root",
+  "frameworkSuperUser": "root",
+  "profiles": {
+    "zero": {
+      "cpu": "0",
+      "mem": "0"
+    },
+    "small": {
+      "cpu": "2",
+      "mem": "2048"
+    },
+    "medium": {
+      "cpu": "6",
+      "mem": "8192"
+    },
+    "large": {
+      "cpu": "10",
+      "mem": "12288"
+    }
+  },
+  "nmInstances": {
+    "medium": 0
+  },
+  "rebalancer": false,
+  "nativeLibrary": "/usr/local/lib/libmesos.so",
+  "zkServers": "master.mesos:2181",
+  "zkTimeout": 20000,
+  "restApiPort": 8192,
+  "yarnEnvironment": {
+    "YARN_HOME": "hadoop",
+    "JAVA_HOME": "/opt/jre",
+    "HADOOP_CONF_DIR": "hadoop/etc/hadoop",
+    "MESOS_NATIVE_LIBRARY": "/usr/local/lib/libmesos.so",
+    "MESOS_NATIVE_JAVA_LIBRARY": "/usr/local/lib/libmesos.so"
+  },
+  "mesosAuthenticationPrincipal": "myriad",
+  "mesosAuthenticationSecretFilename": "",
+  "servedConfigPath": {
+    "present": false
+  },
+  "servedBinaryPath": {
+    "present": false
+  },
+  "cgroupPath": "/sys/fs/cgroup",
+  "haenabled": false,
+  "serviceConfigurations": null,
+  "nodeManagerConfiguration": {
+    "jvmMaxMemoryMB": 2048,
+    "cpus": 0.2,
+    "jvmOpts": "value is absent",
+    "cgroups": false
+  },
+  "myriadExecutorConfiguration": {
+    "jvmMaxMemoryMB": 1024,
+    "path": null,
+    "nodeManagerUri": "http://10.1.131.41/myriad2/hadoop-2.7.2.tar.gz",
+    "configUri": "value is absent",
+    "jvmUri": "value is absent"
+  }
+}
+```
+
+##### Rest API
+
+```
+{
+ "application": {
+  "$": {
+   "xmlns": "http://wadl.dev.java.net/2009/02"
+  },
+  "doc": [
+   {
+    "$": {
+     "xmlns:jersey": "http://jersey.java.net/",
+     "jersey:generatedBy": "Jersey: 1.9 09/02/2011 11:17 AM"
+    }
+   }
+  ],
+  "grammars": [
+   ""
+  ],
+  "resources": [
+   {
+    "$": {
+     "base": "http://10.1.131.44:8192/api/"
+    },
+    "resource": [
+     {
+      "$": {
+       "path": "/resource"
+      },
+      "resource": [
+       {
+        "$": {
+         "path": "/unreserve"
+        },
+        "method": [
+         {
+          "$": {
+           "id": "unreserve",
+           "name": "PUT"
+          },
+          "request": [
+           {
+            "representation": [
+             {
+              "$": {
+               "mediaType": "application/json"
+              }
+             }
+            ]
+           }
+          ],
+          "response": [
+           {
+            "representation": [
+             {
+              "$": {
+               "mediaType": "text/plain"
+              }
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "$": {
+         "path": "/reserve"
+        },
+        "method": [
+         {
+          "$": {
+           "id": "reserve",
+           "name": "PUT"
+          },
+          "request": [
+           {
+            "representation": [
+             {
+              "$": {
+               "mediaType": "application/json"
+              }
+             }
+            ]
+           }
+          ],
+          "response": [
+           {
+            "representation": [
+             {
+              "$": {
+               "mediaType": "text/plain"
+              }
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "$": {
+       "path": "/state"
+      },
+      "method": [
+       {
+        "$": {
+         "id": "getState",
+         "name": "GET"
+        },
+        "response": [
+         {
+          "representation": [
+           {
+            "$": {
+             "mediaType": "application/json"
+            }
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "$": {
+       "path": "/cluster"
+      },
+      "resource": [
+       {
+        "$": {
+         "path": "/flexup"
+        },
+        "method": [
+         {
+          "$": {
+           "id": "flexUp",
+           "name": "PUT"
+          },
+          "request": [
+           {
+            "representation": [
+             {
+              "$": {
+               "mediaType": "application/json"
+              }
+             }
+            ]
+           }
+          ],
+          "response": [
+           {
+            "representation": [
+             {
+              "$": {
+               "mediaType": "text/plain"
+              }
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "$": {
+         "path": "/flexupservice"
+        },
+        "method": [
+         {
+          "$": {
+           "id": "flexUpservice",
+           "name": "PUT"
+          },
+          "request": [
+           {
+            "representation": [
+             {
+              "$": {
+               "mediaType": "application/json"
+              }
+             }
+            ]
+           }
+          ],
+          "response": [
+           {
+            "representation": [
+             {
+              "$": {
+               "mediaType": "text/plain"
+              }
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "$": {
+         "path": "/flexdown"
+        },
+        "method": [
+         {
+          "$": {
+           "id": "flexDown",
+           "name": "PUT"
+          },
+          "request": [
+           {
+            "representation": [
+             {
+              "$": {
+               "mediaType": "application/json"
+              }
+             }
+            ]
+           }
+          ],
+          "response": [
+           {
+            "representation": [
+             {
+              "$": {
+               "mediaType": "text/plain"
+              }
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "$": {
+         "path": "/flexdownservice"
+        },
+        "method": [
+         {
+          "$": {
+           "id": "flexDownservice",
+           "name": "PUT"
+          },
+          "request": [
+           {
+            "representation": [
+             {
+              "$": {
+               "mediaType": "application/json"
+              }
+             }
+            ]
+           }
+          ],
+          "response": [
+           {
+            "representation": [
+             {
+              "$": {
+               "mediaType": "text/plain"
+              }
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "$": {
+       "path": "/artifacts"
+      },
+      "resource": [
+       {
+        "$": {
+         "path": "/config.tgz"
+        },
+        "method": [
+         {
+          "$": {
+           "id": "getConfig",
+           "name": "GET"
+          },
+          "response": [
+           {
+            "representation": [
+             {
+              "$": {
+               "mediaType": "application/octet-stream"
+              }
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       },
+       {
+        "$": {
+         "path": "/binary.tgz"
+        },
+        "method": [
+         {
+          "$": {
+           "id": "getBinary",
+           "name": "GET"
+          },
+          "response": [
+           {
+            "representation": [
+             {
+              "$": {
+               "mediaType": "application/octet-stream"
+              }
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "$": {
+       "path": "/framework"
+      },
+      "resource": [
+       {
+        "$": {
+         "path": "/shutdown/framework"
+        },
+        "method": [
+         {
+          "$": {
+           "id": "shutdownFramework",
+           "name": "POST"
+          },
+          "response": [
+           {
+            "representation": [
+             {
+              "$": {
+               "mediaType": "application/json"
+              }
+             }
+            ]
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     },
+     {
+      "$": {
+       "path": "/config"
+      },
+      "method": [
+       {
+        "$": {
+         "id": "getConfig",
+         "name": "GET"
+        },
+        "response": [
+         {
+          "representation": [
+           {
+            "$": {
+             "mediaType": "application/json"
+            }
+           }
+          ]
+         }
+        ]
+       }
+      ]
+     }
+    ]
+   }
+  ]
+ }
+```
 ### Spark
 在整个Hadoop技术栈中，Spark的地位又比较特殊。它与Mesos同出生自Berkeley大学的AMP实验室，Matei Zaharia和Benjamin Hindman既是Spark项目也是Mesos项目的核心创始人，前者后来出去创办了DataBrick公司用于推广Spark技术，而后者作为创始人之一组建了Mesosphere公司，旨在提供基于Mesos技术的商业产品和服务。
 
