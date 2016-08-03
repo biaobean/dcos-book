@@ -25,8 +25,8 @@ github上有一个项目（[项目主页](https://github.com/mesos/hadoop))，�
 ![](mesos/hdfs/cgroup.png)
 
 所以这三个服务是共用了cgroup的配额，这也解释了为什么上面web上看到NameNode总分配的是4GB，而服务进程的Java Heap（-Xmx参数）只有2GB，因为总分配中还包括了Executor（本示例中实际配额为1GB）和DFSZKFailoverController（本示例中实际配额为约600MB）需要的内存，另外还于楼了一部分的native开销。
-#### 配置文件
-##### Executor 配置文件
+### 配置文件
+#### Executor 配置文件
 ```
 core:
   default_name : ${HADOOP_DEFAULT_NAME:-'hdfs://hdfs'}
@@ -69,7 +69,7 @@ hdfs_home : ${HDFS_HOME_DIR:-'./hapdoop-2.5.0-chd5.3.1'}
 java_home : ${JAVA_HOME:-'./jre'}
 ```
 
-##### DataNode环境变量参数
+#### DataNode环境变量参数
 ```
 LIBPROCESS_IP=172.31.21.83
 HADOOP_DATANODE_OPTS=-Dhadoop.security.logger=ERROR,RFAS 
