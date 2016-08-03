@@ -1,6 +1,10 @@
 # Mesos DC/OS
 
-## 功能组件
+
+## 架构
+
+![](https://dcos.io/docs/1.7/overview/img/dcos-architecture-100000ft.png)
+## 组件
 ### Marathon
 
 Marathon is a framework for Mesos that is designed to launch long-running applications, and, in Mesosphere, serves as a replacement for a traditional init system. It has many features that simplify running applications in a clustered environment, such as high-availability, node constraints, application health checks, an API for scriptability and service discovery, and an easy to use web user interface. It adds its scaling and self-healing capabilities to the Mesosphere feature set.
