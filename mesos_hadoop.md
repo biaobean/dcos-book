@@ -130,6 +130,392 @@ hdfs:
 hdfs_home : ${HDFS_HOME_DIR:-'./hapdoop-2.5.0-chd5.3.1'}
 java_home : ${JAVA_HOME:-'./jre'}
 ```
+#### NameNode Task配置
+```
+{
+NameNodeTask{info = name: "namenode-0"
+task_id {
+  value: "namenode-0__796de0f8-90fe-4149-8cd6-a2f7fed1b45e"
+}
+slave_id {
+  value: "31cac3cd-12e6-445e-a0e9-b31f30ddef19-S2"
+}
+resources {
+  name: "cpus"
+  type: SCALAR
+  scalar {
+    value: 0.5
+  }
+  role: "hdfs"
+  reservation {
+    principal: "hdfs"
+    labels {
+      labels {
+        key: "resource_id"
+        value: "d9293230-c6df-4448-8acf-e9262a1b4de1"
+      }
+    }
+  }
+}
+resources {
+  name: "mem"
+  type: SCALAR
+  scalar {
+    value: 4096.0
+  }
+  role: "hdfs"
+  reservation {
+    principal: "hdfs"
+    labels {
+      labels {
+        key: "resource_id"
+        value: "16a8a830-cbce-480c-bf95-f15a8ac53902"
+      }
+    }
+  }
+}
+resources {
+  name: "disk"
+  type: SCALAR
+  scalar {
+    value: 10240.0
+  }
+  role: "hdfs"
+  disk {
+    persistence {
+      id: "fdc70aba-7440-4756-b190-93191c56ed53"
+      principal: "hdfs"
+    }
+    volume {
+      container_path: "volume"
+      mode: RW
+    }
+  }
+  reservation {
+    principal: "hdfs"
+    labels {
+      labels {
+        key: "resource_id"
+        value: "911c0c3f-58b3-4465-80a6-c28dac2c846f"
+      }
+    }
+  }
+}
+resources {
+  name: "ports"
+  type: RANGES
+  ranges {
+    range {
+      begin: 9001
+      end: 9002
+    }
+  }
+  role: "hdfs"
+  reservation {
+    principal: "hdfs"
+    labels {
+      labels {
+        key: "resource_id"
+        value: "83ae64b4-6d62-4a0e-a7df-005c3da336f2"
+      }
+    }
+  }
+}
+executor {
+  executor_id {
+    value: "hdfs-executornamenode-0-455b848c-5df3-4848-8242-7e9b66673f5d"
+  }
+  resources {
+    name: "cpus"
+    type: SCALAR
+    scalar {
+      value: 0.5
+    }
+    role: "hdfs"
+    reservation {
+      principal: "hdfs"
+      labels {
+        labels {
+          key: "resource_id"
+          value: "8be33036-eddb-45e5-8629-980c88c285db"
+        }
+      }
+    }
+  }
+  resources {
+    name: "mem"
+    type: SCALAR
+    scalar {
+      value: 1024.0
+    }
+    role: "hdfs"
+    reservation {
+      principal: "hdfs"
+      labels {
+        labels {
+          key: "resource_id"
+          value: "71025759-9f93-4fc5-a6f5-815713573b73"
+        }
+      }
+    }
+  }
+  resources {
+    name: "disk"
+    type: SCALAR
+    scalar {
+      value: 1024.0
+    }
+    role: "hdfs"
+    reservation {
+      principal: "hdfs"
+      labels {
+        labels {
+          key: "resource_id"
+          value: "9ea6521f-6e9c-4bab-acf6-34a779d246fd"
+        }
+      }
+    }
+  }
+  command {
+    uris {
+      value: "https://downloads.mesosphere.com/hdfs/assets/0.9.0-2.6.0/hadoop-2.6.0-cdh5.7.1-dcos.tar.gz"
+      executable: false
+      extract: true
+      cache: false
+    }
+    uris {
+      value: "https://downloads.mesosphere.com/hdfs/assets/0.9.0-2.6.0/executor.zip"
+      executable: false
+      extract: true
+      cache: false
+    }
+    uris {
+      value: "https://downloads.mesosphere.com/hdfs/assets/0.9.0-2.6.0/jre-8u91-linux-x64.tar.gz"
+      executable: false
+      extract: true
+      cache: false
+    }
+    environment {
+      variables {
+        name: "HADOOP_DEFAULT_NAME"
+        value: "hdfs://hdfs"
+      }
+      variables {
+        name: "HADOOP_HUE_HOSTS"
+        value: "*"
+      }
+      variables {
+        name: "HADOOP_HUE_GROUPS"
+        value: "*"
+      }
+      variables {
+        name: "HADOOP_ROOT_HOSTS"
+        value: "*"
+      }
+      variables {
+        name: "HADOOP_ROOT_GROUPS"
+        value: "*"
+      }
+      variables {
+        name: "HADOOP_HTTP_FS_GROUPS"
+        value: "*"
+      }
+      variables {
+        name: "HADOOP_HTTP_FS_HOSTS"
+        value: "*"
+      }
+      variables {
+        name: "SERVICE_NAME"
+        value: "hdfs"
+      }
+      variables {
+        name: "HDFS_NAME_NODE_BIND_HOST"
+        value: "0.0.0.0"
+      }
+      variables {
+        name: "HDFS_NAME_NODE_RPC_PORT"
+        value: "9001"
+      }
+      variables {
+        name: "HDFS_NAME_NODE_HTTP_PORT"
+        value: "9002"
+      }
+      variables {
+        name: "HDFS_JOURNAL_NODES"
+        value: "3"
+      }
+      variables {
+        name: "HDFS_JOURNAL_NODE_ADDRESS"
+        value: "0.0.0.0"
+      }
+      variables {
+        name: "HDFS_JOURNAL_NODE_RPC_PORT"
+        value: "8485"
+      }
+      variables {
+        name: "HDFS_JOURNAL_NODE_HTTP_PORT"
+        value: "8480"
+      }
+      variables {
+        name: "HDFS_DATA_NODE_ADDRESS"
+        value: "0.0.0.0"
+      }
+      variables {
+        name: "HDFS_DATA_NODE_RPC_PORT"
+        value: "9003"
+      }
+      variables {
+        name: "HDFS_DATA_NODE_IPC_PORT"
+        value: "9005"
+      }
+      variables {
+        name: "HDFS_DATA_NODE_HTTP_PORT"
+        value: "9004"
+      }
+      variables {
+        name: "HDFS_VOLUME_DIRECTORY"
+        value: "volume"
+      }
+      variables {
+        name: "HDFS_DOMAIN_SOCKET_DIRECTORY"
+        value: ""
+      }
+      variables {
+        name: "HDFS_ZOOKEEPER_QUORUM"
+        value: "master.mesos:2181"
+      }
+      variables {
+        name: "HDFS_PERMISSIONS_ENABLED"
+        value: "false"
+      }
+      variables {
+        name: "HDFS_DATA_NODE_BANDWIDTH_PER_SECOND"
+        value: "41943040"
+      }
+      variables {
+        name: "HDFS_NAME_NODE_THRESHOLD_PERCENTAGE"
+        value: "0.9"
+      }
+      variables {
+        name: "HDFS_NAME_NODE_HEARTBEAT_RECHECK_INTERVAL"
+        value: "60000"
+      }
+      variables {
+        name: "HDFS_DATA_NODE_HANDLER_COUNT"
+        value: "10"
+      }
+      variables {
+        name: "HDFS_NAME_NODE_HANDLER_COUNT"
+        value: "20"
+      }
+      variables {
+        name: "HDFS_COMPRESS_IMAGE"
+        value: "true"
+      }
+      variables {
+        name: "HDFS_IMAGE_COMPRESSION_CODEC"
+        value: "org.apache.hadoop.io.compress.SnappyCodec"
+      }
+      variables {
+        name: "HDFS_NAME_NODE_INVALIDATE_WORK_PERCENTAGE"
+        value: "0.95"
+      }
+      variables {
+        name: "HDFS_NAME_NODE_REPLICATION_WORK_MULTIPLIER"
+        value: "4"
+      }
+      variables {
+        name: "HDFS_CLIENT_READ_SHORT_CIRCUIT"
+        value: "true"
+      }
+      variables {
+        name: "HDFS_CLIENT_READ_SHORT_CIRCUIT_STREAMS"
+        value: "1000"
+      }
+      variables {
+        name: "HDFS_CLIENT_READ_SHORT_CIRCUIT_CACHE_EXPIRY_MS"
+        value: "1000"
+      }
+      variables {
+        name: "JAVA_HOME"
+        value: "./jre1.8.0_91"
+      }
+      variables {
+        name: "JAVA_OPTS"
+        value: "-Xmx768M"
+      }
+      variables {
+        name: "HDFS_HOME_DIR"
+        value: "./hadoop-2.6.0-cdh5.7.1"
+      }
+      variables {
+        name: "HDFS_VERSION"
+        value: "2.5.0"
+      }
+    }
+    value: "./executor/bin/hdfs-executor executor/conf/executor.yml"
+  }
+  framework_id {
+    value: "052098b0-7b7c-4c7c-9d84-0911f251a41e-0001"
+  }
+  name: "hdfs-executornamenode-0"
+}
+labels {
+  labels {
+    key: "hdfs_task_type"
+    value: "NAME_NODE"
+  }
+  labels {
+    key: "hdfs_heap_mb"
+    value: "2048"
+  }
+  labels {
+    key: "hdfs_upgrade"
+    value: "false"
+  }
+  labels {
+    key: "hdfs_task_ports"
+    value: "9001,9002"
+  }
+  labels {
+    key: "hdfs_rollback"
+    value: "false"
+  }
+  labels {
+    key: "hdfs_disk_type"
+    value: "ROOT"
+  }
+  labels {
+    key: "hdfs_task_hostname"
+    value: "172.31.21.80"
+  }
+  labels {
+    key: "hdfs_fs_formatted"
+    value: "true"
+  }
+  labels {
+    key: "hdfs_zkfc_formatted"
+    value: "true"
+  }
+  labels {
+    key: "hdfs_firstlaunch"
+    value: "false"
+  }
+  labels {
+    key: "hdfs_task_state"
+    value: "TASK_LOST"
+  }
+  labels {
+    key: "hdfs_node_initialized"
+    value: "false"
+  }
+  labels {
+    key: "hdfs_standby"
+    value: "false"
+  }
+}
+}
+```
 
 #### DataNode环境变量参数
 ```
