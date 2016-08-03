@@ -6,5 +6,5 @@
 * [Mesos DC/OS](mesos_dcos.md)
 * [Mesos与Yarn的对比](mesos_vs_yarn.md)
 * [Cloud Native](cloud_native.md)
-* Mesos的Hadoop支持
+* [Mesos的Hadoop支持](mesos_hadoop.md)
 
