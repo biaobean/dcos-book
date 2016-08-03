@@ -83,9 +83,10 @@ resources {
 
 用CPU使用限制为例，下面是cgroup的CPU限制文件，进程号24822和24807已经在里面，可见NameNode进程和DFSZKFailoverController的CPU使用已经被限制，而其中还有一个24551是他们的父进程，即Executor进程。
 
-![](mesos/hdfs/cgroup.png)
+![](mesos/hdfs/cgroup_mm.png)
 
-所以这三个服务是共用了cgroup的配额，这也解释了为什么上面web上看到NameNode总分配的是4GB，而服务进程的Java Heap（-Xmx参数）只有2GB，因为总分配中还包括了Executor（本示例中实际配额为1GB）和DFSZKFailoverController（本示例中实际配额为约600MB）需要的内存，另外还于楼了一部分的native开销。
+所以这三个服务是共用了cgroup的配额，这也解释了为什么上面web上看到NameNode总分配的是4GB，而服务进程的Java Heap（-Xmx参数）只有2GB，因为总分配中还包括了DFSZKFailoverController（本示例中实际配额为1GB）需要的内存，另外还预留了1GB的native开销。而Executor的stderr和stdout日志的LogRotate是放在Mesos Slave的cgroup下，被Mesos Slave分摊了。
+
 ### 配置文件
 #### Executor 配置文件
 ```
