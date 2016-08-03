@@ -4,7 +4,7 @@
 github上有一个项目（[项目主页](https://github.com/mesos/hadoop))，用于在Mesos上运行Hadoop。其实现中的Hadoop整体打包进了CDH5.2发行版，只支持MapReduce 1.0版本，不支持MapReduce 2.0和YARN。项目现在活跃度很低，最后的更新已经是半年前，已经算是昨日黄花了。
 
 ## HDFS
-现在Mesos DC/OS的仓库中提供了一个HDFS的包，其项目([项目主页](https://github.com/mesosphere/hdfs))实现源自Brenden Matthews，用于在DC/OS上一键启动一个“标准化”的HDFS服务，其中包括2个NameNode（和相应的DFSZKFailoverController服务），3个JournalNode其他的为DataNode，缺省实现为3个DataNode，如下图：
+现在Mesos DC/OS的仓库中提供了一个HDFS的包，其项目([项目主页](https://github.com/mesosphere/hdfs))实现源自Brenden Matthews，用于在DC/OS上一键启动一个“标准化”的HDFS服务，其中包括2个NameNode（和相应的DFSZKFailoverController服务），3个JournalNode，其他的为DataNode，缺省实现为3个DataNode，如下图：
 
 ![](mesos/hdfs/mesos_hdfs_web.png)
 
@@ -71,6 +71,7 @@ resources {
 }
 ```
 
+可以看到，Excutor自己用掉了0.5个CPU，1GB内存和1GB磁盘空间，这个和页面中观察到的一样。
 
 登录相应的节点，可以看到HDFS框架启动的NameNode服务进程，本示例中进程号为24822，请注意Java Heap的值是2GB，而非上面看到的4GB：
 
