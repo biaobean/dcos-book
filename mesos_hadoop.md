@@ -12,6 +12,66 @@ github上有一个项目（[项目主页](https://github.com/mesos/hadoop))，�
 
 ![](mesos/hdfs/nn_web.png)
 
+左边为Mesos Slave服务器要运行NameNode Executor总共分配的资源以及使用量，右边是NamNode任务实际需要的资源，可以看到少了一些资源，因为Executor自身也需要一定资源的，我们可以在Executor的运行日志中进行检验，可以stdout中有如下的输出：
+```
+06:01:13.658 [main] INFO  c.mesosphere.dcos.hdfs.executor.Main - Starting driver
+06:01:13.721 [Thread-1] INFO  c.m.dcos.hdfs.executor.HdfsExecutor - Registered: executor = executor_id {
+  value: "hdfs-executornamenode-0-455b848c-5df3-4848-8242-7e9b66673f5d"
+}
+resources {
+  name: "cpus"
+  type: SCALAR
+  scalar {
+    value: 0.5
+  }
+  role: "hdfs"
+  reservation {
+    principal: "hdfs"
+    labels {
+      labels {
+        key: "resource_id"
+        value: "8be33036-eddb-45e5-8629-980c88c285db"
+      }
+    }
+  }
+}
+resources {
+  name: "mem"
+  type: SCALAR
+  scalar {
+    value: 1024.0
+  }
+  role: "hdfs"
+  reservation {
+    principal: "hdfs"
+    labels {
+      labels {
+        key: "resource_id"
+        value: "71025759-9f93-4fc5-a6f5-815713573b73"
+      }
+    }
+  }
+}
+resources {
+  name: "disk"
+  type: SCALAR
+  scalar {
+    value: 1024.0
+  }
+  role: "hdfs"
+  reservation {
+    principal: "hdfs"
+    labels {
+      labels {
+        key: "resource_id"
+        value: "9ea6521f-6e9c-4bab-acf6-34a779d246fd"
+      }
+    }
+  }
+}
+```
+
+
 登录相应的节点，可以看到HDFS框架启动的NameNode服务进程，本示例中进程号为24822，请注意Java Heap的值是2GB，而非上面看到的4GB：
 
 ![](mesos/hdfs/nn_ps.png)
