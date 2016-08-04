@@ -113,6 +113,8 @@ HDFS中有很多配置，Mesosphere的HDFS项目是如何通过Mesos进行设置
   }
 ```
 
+值得注意的是HDFS服务的设置是通过环境变量的方式设置的，而不是.xml文件。这对配置管理以及应用访问造成了极大的不便。
+
 ### 文件
 https://downloads.mesosphere.com/hdfs/assets/0.9.0-2.6.0/scheduler.zip
 
