@@ -81,7 +81,7 @@ resources {
 
 ![](mesos/hdfs/zkfc.png)
 
-用CPU使用限制为例，下面是cgroup的CPU限制文件，进程号24822和24807已经在里面，可见NameNode进程和DFSZKFailoverController的CPU使用已经被限制，而其中还有一个24551是他们的父进程，即Executor进程。
+用CPU使用限制为例，下面是cgroup的CPU限制文件，进程号24822和24807已经在里面，而其中还有一个24551是他们的父进程，即Executor进程。可见NameNode进程和DFSZKFailoverController的CPU使用已经被限制，同时并没有建子cgroup进行更细的限制，与Executor共用5GB内存配额。
 
 ![](mesos/hdfs/cgroup_mm.png)
 
@@ -94,7 +94,36 @@ resources {
 
 ![](mesos/hdfs/dn_web.png)
 
+### Hadoop设置
+
+HDFS中有很多配置，Mesosphere的HDFS项目是如何通过Mesos进行设置的呢？
+
+这个实现是通过org.apache.mesos.hdfs.config.HdfsFrameworkConfig类来实现，其读取设置的代码如下：
+```java
+  public HdfsFrameworkConfig() {
+    // The path is configurable via the mesos.conf.path system property
+    // so it can be changed when starting up the scheduler via bash
+    Properties props = System.getProperties();
+    Path configPath = new Path(props.getProperty("mesos.conf.path", "etc/hadoop/mesos-site.xml"));
+    Configuration configuration = new Configuration();
+    configuration.addResource(configPath);
+    configuration.addResource(getSysPropertiesConfiguration());
+    configuration.addResource(getEnvConfiguration());
+    setConf(configuration);
+  }
+```
+
 ### 配置文件
+https://downloads.mesosphere.com/hdfs/assets/0.9.0-2.6.0/scheduler.zip
+
+https://downloads.mesosphere.com/hdfs/assets/0.9.0-2.6.0/hadoop-2.6.0-cdh5.7.1-dcos.tar.gz
+
+https://downloads.mesosphere.com/hdfs/assets/0.9.0-2.6.0/executor.zip
+
+### 配置文件
+#### Scheduler 配置文件
+```
+```
 #### Executor 配置文件
 ```
 core:
