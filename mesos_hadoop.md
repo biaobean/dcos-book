@@ -143,7 +143,7 @@ marathon的[template](https://github.com/mesosphere/universe/blob/version-3.x/re
   }
 ```
 
-值得注意的是：**HDFS服务的设置是通过环境变量的方式设置的，而不是.xml文件。**这对配置管理以及应用访问造成了极大的不便。
+值得注意的是：**HDFS服务的设置是通过环境变量的方式设置的**，而不是.xml文件。这对配置管理以及应用访问造成了极大的不便。同时，由于mesos-hdfs的设置到映射为真正HDFS的路径太长太复杂，对于运维和调试增加和恨到的难度。
 
 实际中DC/OS提供了hdfs子命令（项目地址），能够使用
 ```
@@ -1215,7 +1215,6 @@ HDFS_DATA_NODE_HANDLER_COUNT=10
 MESOS_SANDBOX=/var/lib/mesos/slave/slaves/31cac3cd-12e6-445e-a0e9-b31f30ddef19-S0/frameworks/052098b0-7b7c-4c7c-9d84-0911f251a41e-0001/executors/hdfs-executordatanode-0-ff57753e-5492-4725-82a1-1d0b36334c4b/runs/fcd9df3b-1550-464b-83d4-7094f44c2312
 HDFS_IMAGE_COMPRESSION_CODEC=org.apache.hadoop.io.compress.SnappyCodec
 ```
-
 
 ### YARN支持——Myraid
 Apache的孵化器中有个一个叫Myraid的项目([项目主页](http://myriad.incubator.apache.org))，
