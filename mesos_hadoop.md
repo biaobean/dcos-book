@@ -96,6 +96,24 @@ resources {
 
 ### Hadoop设置
 
+#### 指定部署约束
+
+Applying mesos slave constraints (Optional)
+
+In mesos-site.xml, add the configuration mesos.hdfs.constraints
+Set the value of configuration as ";" separated set of key:value pairs. Key and value has to be separated by the ":". Key represents the attribute name. Value can be exact match, less than or equal to, subset or value within the range for attribute of type text, scalar, set and range, respectively. For example:
+<property>
+  <name>mesos.hdfs.constraints</name>
+  <value>zone:west,east;cpu:4;quality:optimized-disk;id:4</value>
+</property>
+
+"zone" is type of set with members {"west","east"}.
+"cpu" is type of scalar. 
+"quality" is type of text. 
+"id" may be type of range. 
+
+#### HDFS参数配置
+
 HDFS中有很多配置，Mesosphere的HDFS项目是如何通过Mesos进行设置的呢？
 
 如果是“人肉”手工在Mesos上安装mesos-hdfs，设置是通过修改mesos-site.xml文件，参见[这里](https://github.com/mesosphere/hdfs/blob/master/README.md)。如果是使用package命令通过univese repo来自动安装，需要修改服务器上的config.json文件。
