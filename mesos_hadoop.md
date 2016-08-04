@@ -98,7 +98,7 @@ resources {
 
 HDFS中有很多配置，Mesosphere的HDFS项目是如何通过Mesos进行设置的呢？
 
-这个实现是通过org.apache.mesos.hdfs.config.HdfsFrameworkConfig类来实现，其读取设置的代码如下：
+这个实现是通过[org.apache.mesos.hdfs.config.HdfsFrameworkConfig](https://github.com/mesosphere/hdfs/blob/master/hdfs-commons/src/main/java/org/apache/mesos/hdfs/config/HdfsFrameworkConfig.java)类来实现，其读取设置的代码如下：
 ```java
   public HdfsFrameworkConfig() {
     // The path is configurable via the mesos.conf.path system property
