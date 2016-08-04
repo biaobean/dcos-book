@@ -87,6 +87,13 @@ resources {
 
 所以这三个服务是共用了cgroup的配额，这也解释了为什么上面web上看到NameNode总分配的是4GB，而服务进程的Java Heap（-Xmx参数）只有2GB，因为总分配中还包括了DFSZKFailoverController（本示例中实际配额为1GB）需要的内存，另外还预留了1GB的native开销。而Executor的stderr和stdout日志的LogRotate是放在Mesos Slave的cgroup下，被Mesos Slave分摊了。
 
+链接NameNode的WebUI（本示例中Web服务端口不是缺省的50070，而是9002，参见后面的NameNode Task配置中的HDFS_NAME_NODE_HTTP_PORT），可以看到HDFS的总览：
+![](mesos/hdfs/nn_web.png)
+
+以及所有DataNode的信息：
+
+![](mesos/hdfs/dn_web.png)
+
 ### 配置文件
 #### Executor 配置文件
 ```
