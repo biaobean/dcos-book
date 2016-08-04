@@ -102,7 +102,13 @@ HDFS中有很多配置，Mesosphere的HDFS项目是如何通过Mesos进行设置
 
 用NameNode的Web UI端口为例子，按mesos官网的版本实现在[这里](https://github.com/mesosphere/universe/blob/version-3.x/repo/packages/H/hdfs/5/config.json)，其中：
 ```
-"name_node_http_port": {
+"hdfs": {
+			"type": "object",
+			"id": "http://hdfs/dcos/mesosphere.com/hdfs",
+			"description": "HDFS File System configuration options",
+			"properties": {
+            ...
+            "name_node_http_port": {
 					"type": "integer",
 					"id": "http://hdfs/dcos/mesosphere.com/hdfs/name_node_http_port",
 					"description": "The HTTP port for HDFS Name Nodes. ",
@@ -118,7 +124,9 @@ marathon的[template](https://github.com/mesosphere/universe/blob/version-3.x/re
 ...
 ```
 
-在实际部署中，会将json中的值回填到
+在实际部署中，会将json中的值回填
+
+![](mesos/hdfs/marathon_config.png)
 
 这个实现是通过[org.apache.mesos.hdfs.config.HdfsFrameworkConfig](https://github.com/mesosphere/hdfs/blob/master/hdfs-commons/src/main/java/org/apache/mesos/hdfs/config/HdfsFrameworkConfig.java)类来实现，其读取设置的代码如下：
 ```java
