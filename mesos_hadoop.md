@@ -123,6 +123,113 @@ https://downloads.mesosphere.com/hdfs/assets/0.9.0-2.6.0/executor.zip
 ### 配置文件
 #### Scheduler 配置文件
 ```
+service:
+  name : ${SERVICE_NAME:-'hdfs'}
+  user : ${SERVICE_USER:-"root"}
+  role : "${SERVICE_ROLE:-${SERVICE_NAME:-hdfs}-role}"
+  principal : "${SERVICE_PRINCIPAL:-${SERVICE_NAME:-hdfs}-principal}"
+  secret: ${FRAMEWORK_SECRET_FILE:-""}
+  failover_timeout_s : ${FRAMEWORK_FAILOVER_TIMEOUT_S:-604800}
+  checkpoint : ${FRAMEWORK_CHECKPOINT:-true}
+core:
+  default_name : ${HADOOP_DEFAULT_NAME:-'hdfs://hdfs'}
+  hue_hosts : ${HADOOP_HUE_HOSTS:-'*'}
+  hue_groups : ${HADOOP_HUE_GROUPS:-'*'}
+  root_hosts : ${HADOOP_ROOT_HOSTS:-'*'}
+  root_groups : ${HADOOP_ROOT_GROUPS:-'*'}
+  http_fs_hosts : ${HADOOP_HTTP_FS_HOSTS:-'*'}
+  http_fs_groups : ${HADOOP_HTTP_FS_GROUPS:-'*'}
+hdfs:
+  service_name : ${SERVICE_NAME:-'hdfs'}
+  name_node_bind_host : ${HDFS_NAME_NODE_BIND_HOST:-'0.0.0.0'}
+  name_node_rpc_port : ${HDFS_NAME_NODE_RPC_PORT:-50071}
+  name_node_http_port : ${HDFS_NAME_NODE_HTTP_PORT:-50070}
+  journal_nodes : ${HDFS_JOURNAL_NODES:-3}
+  journal_node_address : ${HDFS_JOURNAL_NODE_ADDRESS:-'0.0.0.0'}
+  journal_node_rpc_port : ${HDFS_JOURNAL_NODE_RPC_PORT:-8485}
+  journal_node_http_port : ${HDFS_JOURNAL_NODE_HTTP_PORT:-8480}
+  data_node_address : ${HDFS_DATA_NODE_ADDRESS:-'0.0.0.0'}
+  data_node_rpc_port : ${HDFS_DATA_NODE_RPC_PORT:-50075}
+  data_node_http_port : ${HDFS_DATA_NODE_HTTP_PORT:-50010}
+  data_node_ipc_port : ${HDFS_DATA_NODE_IPC_PORT:-50020}
+  volume_directory : ${HDFS_VOLUME_DIRECTORY:-'volume'}
+  domain_socket_directory : ${HDFS_DOMAIN_SOCKET_DIRECTORY:-''}
+  zookeeper_quorum : ${HDFS_ZOOKEEPER_QUORUM:-'master.mesos:2181'}
+  permissions_enabled : ${HDFS_PERMISSIONS_ENABLED:-false}
+  data_node_bandwidth_per_second : ${HDFS_DATA_NODE_BANDWIDTH_PER_SECOND:-41943040}
+  name_node_threshold_percentage : ${HDFS_NAME_NODE_THRESHOLD_PERCENTAGE:-0.9}
+  name_node_heartbeat_recheck_interval : ${HDFS_NAME_NODE_HEARTBEAT_RECHECK_INTERVAL:-60000}
+  data_node_handler_count : ${HDFS_DATA_NODE_HANDLER_COUNT:-10}
+  name_node_handler_count : ${HDFS_NAME_NODE_HANDLER_COUNT:-20}
+  compress_image : ${HDFS_COMPRESS_IMAGE:-false}
+  image_compression_codec : ${HDFS_IMAGE_COMPRESSION_CODEC:-'org.apache.hadoop.io.compress.SnappyCodec'}
+  name_node_invalidate_work_percentage : ${HDFS_NAME_NODE_INVALIDATE_WORK_PERCENTAGE:-0.95}
+  name_node_replication_work_multiplier : ${HDFS_NAME_NODE_REPLICATION_WORK_MULTIPLIER:-4}
+  client_read_short_circuit : ${HDFS_CLIENT_READ_SHORT_CIRCUIT:-true}
+  client_read_short_circuit_streams : ${HDFS_CLIENT_READ_SHORT_CIRCUIT_STREAMS:-1000}
+  client_read_short_circuit_cache_expiry_ms : ${HDFS_CLIENT_READ_SHORT_CIRCUIT_CACHE_EXPIRY_MS:-1000}
+data_nodes_count: ${HDFS_DATA_NODES:-3}
+name_node:
+  cpus : ${HDFS_NAME_NODE_CPUS:-0.5}
+  memory_mb : ${HDFS_NAME_NODE_MEMORY_MB:-4096}
+  heap_mb : ${HDFS_NAME_NODE_HEAP_MB:-2048}
+  disk_mb : ${HDFS_NAME_NODE_DISK_MB:-10240}
+  disk_type : ${HDFS_NAME_NODE_DISK_TYPE:-"ROOT"}
+journal_node:
+  cpus : ${HDFS_JOURNAL_NODE_CPUS:-0.5}
+  memory_mb : ${HDFS_JOURNAL_NODE_MEMORY_MB:-2048}
+  heap_mb : ${HDFS_JOURNAL_NODE_HEAP_MB:-1024}
+  disk_mb : ${HDFS_JOURNAL_NODE_DISK_MB:-10240}
+  disk_type : ${HDFS_JOURNAL_NODE_DISK_TYPE:-"ROOT"}
+data_node:
+  cpus : ${HDFS_DATA_NODE_CPUS:-0.5}
+  memory_mb : ${HDFS_DATA_NODE_MEMORY_MB:-4096}
+  heap_mb : ${HDFS_DATA_NODE_HEAP_MB:-2048}
+  disk_mb : ${HDFS_DATA_NODE_DISK_MB:-10240}
+  disk_type : ${HDFS_DATA_NODE_DISK_TYPE:-"ROOT"}
+executor:
+  command : ${EXECUTOR_COMMAND:-'./executor/bin/hdfs-executor executor/conf/executor.yml'}
+  cpus : ${EXECUTOR_CPUS:-0.1}
+  memory_mb : ${EXECUTOR_MEMORY_MB:-768}
+  disk_mb : ${EXECUTOR_DISK_MB:-1024}
+  heap_mb : ${EXECUTOR_HEAP_MB:-512}
+  java_home : ${EXECUTOR_JAVA_HOME:-"./jre"}
+  hdfs_home : ${EXECUTOR_HDFS_HOME:- './hapdoop-2.6.0-chd5.7.0'}
+  hdfs_version: ${EXECUTOR_HDFS_VERSION:- '2.6.0'}
+  jre_url : ${EXECUTOR_JRE_LOCATION:-'https://s3-us-west-2.amazonaws.com/hdfs-dev/jre/server-jre-8u74-linux-x64.tar.gz'}
+  executor_url : ${EXECUTOR_LOCATION:-'https://s3-us-west-2.amazonaws.com/hdfs-dev/executor.zip'}
+  hdfs_url : ${EXECUTOR_HDFS_LOCATION:-'https://s3-us-west-2.amazonaws.com/hdfs-dev/hapdoop-2.6.0-chd5.7.0.tar.gz'}
+dcos:
+  servers: ${DCOS_SERVERS:-"master.mesos:2181"}
+  path: ${DCOS_PATH:-"/mesos"}
+  timeout_ms: ${DCOS_TIMEOUT_MS:-10000}
+zookeeper:
+  servers: ${ZOOKEEPER_SERVERS:-"master.mesos:2181"}
+  session_timeout_ms: 10000
+  connection_timeout_ms: 10000
+  operation_timeout_ms: 10000
+  backoff_ms: 10000
+server:
+  type: simple
+  adminContextPath: /admin
+  applicationContextPath: /
+  connector:
+    type: http
+    port: ${API_PORT:-8080}
+logging:
+  level: ${LOG_LEVEL:-INFO}
+  appenders:
+    - type: file
+      currentLogFilename: ${LOG_FILE:-hdfs-service.log}
+      threshold: ALL
+      archive: true
+      archivedFileCount: 5
+      archivedLogFilenamePattern: ${LOG_FILE:-hdfs-service.log}.%d
+      timeZone: UTC
+    - type: console
+      threshold: ALL
+      timeZone: UTC
+      target: stdout
 ```
 #### Executor 配置文件
 ```
