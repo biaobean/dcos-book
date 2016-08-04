@@ -146,7 +146,7 @@ marathon的[template](https://github.com/mesosphere/universe/blob/version-3.x/re
 
 ![](mesos/hdfs/marathon_config.png)
 
-在启动Executor以及启动HDFS服务的时候都会通过[org.apache.mesos.hdfs.config.HdfsFrameworkConfig](https://github.com/mesosphere/hdfs/blob/master/hdfs-commons/src/main/java/org/apache/mesos/hdfs/config/HdfsFrameworkConfig.java)类来读取配置，其实现代码如下：
+在启动Executor以及启动HDFS服务的时候会设置进程相应的环境变量，然后通过[org.apache.mesos.hdfs.config.HdfsFrameworkConfig](https://github.com/mesosphere/hdfs/blob/master/hdfs-commons/src/main/java/org/apache/mesos/hdfs/config/HdfsFrameworkConfig.java)类来读取所有配置到Java的Configuration对象中并在配置，其实现代码如下：
 ```java
   public HdfsFrameworkConfig() {
     // The path is configurable via the mesos.conf.path system property
@@ -159,6 +159,67 @@ marathon的[template](https://github.com/mesosphere/universe/blob/version-3.x/re
     configuration.addResource(getEnvConfiguration());
     setConf(configuration);
   }
+```
+  protected Process startProcess(ExecutorDriver driver, Task task) {
+    log.info(String.format("Starting process: %s", task.getCmd()));
+    Process proc = task.getProcess();
+    reloadConfig();
+    if (proc == null) {
+      try {
+        Map<String, String> envMap = createHdfsNodeEnvironment(task);
+
+        Process process = ProcessUtil.startCmd(envMap, task.getCmd());
+        procWatcher.watch(process);
+        task.setProcess(process);
+      } catch (IOException e) {
+        log.error("Unable to start process:", e);
+        task.getProcess().destroy();
+        sendTaskFailed(driver, task);
+      }
+    } else {
+      log.error("Tried to start process, but process already running");
+    }
+
+    return proc;
+  }
+
+  private Map<String, String> createHdfsNodeEnvironment(Task task) {
+    Map<String, String> envMap = new HashMap<>();
+    NodeConfig nodeConfig = config.getNodeConfig(task.getType());
+
+    envMap.put("HADOOP_HEAPSIZE", String.format("%d", nodeConfig.getMaxHeap()));
+    envMap.put("HADOOP_OPTS", config.getJvmOpts());
+    envMap.put("HADOOP_NAMENODE_OPTS",
+      "-Xmx" + config.getNodeConfig(HDFSConstants.NAME_NODE_ID).getMaxHeap() + "m -Xms" +
+        config.getNodeConfig(HDFSConstants.NAME_NODE_ID).getMaxHeap() + "m");
+    envMap.put("HADOOP_DATANODE_OPTS",
+      "-Xmx" + config.getNodeConfig(HDFSConstants.DATA_NODE_ID).getMaxHeap() + "m -Xms" +
+        config.getNodeConfig(HDFSConstants.DATA_NODE_ID).getMaxHeap() + "m");
+
+    return envMap;
+  }
+
+org.apache.mesos.process.ProcessUtil
+```
+public class ProcessUtil {
+  ...
+  public static Process startCmd(Map<String, String> envMap, String... cmd) throws IOException {
+    LOG.info(String.format("Starting process: %s", Arrays.asList(cmd)));
+    ProcessBuilder processBuilder = new ProcessBuilder(cmd);
+    setEnvironment(envMap, processBuilder);
+    Process process = processBuilder.start();
+    StreamUtil.redirectProcess(process);
+    return process;
+  }
+
+  private static void setEnvironment(Map<String, String> envMap, ProcessBuilder processBuilder) {
+    if (envMap != null && CollectionUtils.isNotEmpty(envMap.keySet())) {
+      for (Map.Entry<String, String> env : envMap.entrySet()) {
+        processBuilder.environment().put(env.getKey(), env.getValue());
+      }
+    }
+  }
+}
 ```
 
 值得注意的是：**HDFS服务的设置是通过环境变量的方式设置的**，而不是.xml文件。这对配置管理以及应用访问造成了极大的不便。同时，由于mesos-hdfs的设置到映射为真正HDFS的路径太长太复杂，对于运维和调试增加和恨到的难度。
