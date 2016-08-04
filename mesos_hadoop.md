@@ -100,15 +100,26 @@ HDFS中有很多配置，Mesosphere的HDFS项目是如何通过Mesos进行设置
 
 如果是“人肉”手工在Mesos上安装mesos-hdfs，设置是通过修改mesos-site.xml文件，参见[这里](https://github.com/mesosphere/hdfs/blob/master/README.md)。如果是使用package命令通过univese repo来自动安装，需要修改服务器上的config.json文件。
 
-按mesos官网的版本实现在[这里](https://github.com/mesosphere/universe/blob/version-3.x/repo/packages/H/hdfs/5/config.json)，举例。
+用NameNode的Web UI端口为例子，按mesos官网的版本实现在[这里](https://github.com/mesosphere/universe/blob/version-3.x/repo/packages/H/hdfs/5/config.json)，其中：
+```
 "name_node_http_port": {
 					"type": "integer",
 					"id": "http://hdfs/dcos/mesosphere.com/hdfs/name_node_http_port",
 					"description": "The HTTP port for HDFS Name Nodes. ",
 					"default": 9002
 				},
+```
 
-在实际部署中，marathon会将json中
+marathon的[template](https://github.com/mesosphere/universe/blob/version-3.x/repo/packages/H/hdfs/5/marathon.json.mustache)中相应的设置如下：
+```
+"env":{
+...
+"HDFS_NAME_NODE_HTTP_PORT":"{{hdfs.name_node_http_port}}"
+...
+```
+
+在实际部署中，会将json中的值回填到
+
 这个实现是通过[org.apache.mesos.hdfs.config.HdfsFrameworkConfig](https://github.com/mesosphere/hdfs/blob/master/hdfs-commons/src/main/java/org/apache/mesos/hdfs/config/HdfsFrameworkConfig.java)类来实现，其读取设置的代码如下：
 ```java
   public HdfsFrameworkConfig() {
