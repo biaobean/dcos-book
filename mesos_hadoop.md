@@ -128,8 +128,7 @@ marathon的[template](https://github.com/mesosphere/universe/blob/version-3.x/re
 
 ![](mesos/hdfs/marathon_config.png)
 
-在
-这个实现是通过[org.apache.mesos.hdfs.config.HdfsFrameworkConfig](https://github.com/mesosphere/hdfs/blob/master/hdfs-commons/src/main/java/org/apache/mesos/hdfs/config/HdfsFrameworkConfig.java)类来实现，其读取设置的代码如下：
+在启动Executor以及启动HDFS服务的时候都会通过[org.apache.mesos.hdfs.config.HdfsFrameworkConfig](https://github.com/mesosphere/hdfs/blob/master/hdfs-commons/src/main/java/org/apache/mesos/hdfs/config/HdfsFrameworkConfig.java)类来读取配置，其实现代码如下：
 ```java
   public HdfsFrameworkConfig() {
     // The path is configurable via the mesos.conf.path system property
