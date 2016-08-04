@@ -113,7 +113,7 @@ HDFS中有很多配置，Mesosphere的HDFS项目是如何通过Mesos进行设置
   }
 ```
 
-### 配置文件
+### 文件
 https://downloads.mesosphere.com/hdfs/assets/0.9.0-2.6.0/scheduler.zip
 
 https://downloads.mesosphere.com/hdfs/assets/0.9.0-2.6.0/hadoop-2.6.0-cdh5.7.1-dcos.tar.gz
