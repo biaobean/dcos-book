@@ -142,6 +142,51 @@ marathon的[template](https://github.com/mesosphere/universe/blob/version-3.x/re
     setConf(configuration);
   }
 ```
+Executor的接口launchTask()负责启动真正干会儿的进程，实现在
+org.apache.mesos.hdfs.executor.AbstractNodeExecutor类中：
+
+```java
+  protected Process startProcess(ExecutorDriver driver, Task task) {
+    log.info(String.format("Starting process: %s", task.getCmd()));
+    Process proc = task.getProcess();
+    reloadConfig();
+    if (proc == null) {
+      try {
+        Map<String, String> envMap = createHdfsNodeEnvironment(task);
+
+        Process process = ProcessUtil.startCmd(envMap, task.getCmd());
+        procWatcher.watch(process);
+        task.setProcess(process);
+      } catch (IOException e) {
+        log.error("Unable to start process:", e);
+        task.getProcess().destroy();
+        sendTaskFailed(driver, task);
+      }
+    } else {
+      log.error("Tried to start process, but process already running");
+    }
+
+    return proc;
+  }
+```
+其中负责创建HDFS服务进程环境变量的createHdfsNodeEnvironment()函数实现如下：
+```java
+  private Map<String, String> createHdfsNodeEnvironment(Task task) {
+    Map<String, String> envMap = new HashMap<>();
+    NodeConfig nodeConfig = config.getNodeConfig(task.getType());
+
+    envMap.put("HADOOP_HEAPSIZE", String.format("%d", nodeConfig.getMaxHeap()));
+    envMap.put("HADOOP_OPTS", config.getJvmOpts());
+    envMap.put("HADOOP_NAMENODE_OPTS",
+      "-Xmx" + config.getNodeConfig(HDFSConstants.NAME_NODE_ID).getMaxHeap() + "m -Xms" +
+        config.getNodeConfig(HDFSConstants.NAME_NODE_ID).getMaxHeap() + "m");
+    envMap.put("HADOOP_DATANODE_OPTS",
+      "-Xmx" + config.getNodeConfig(HDFSConstants.DATA_NODE_ID).getMaxHeap() + "m -Xms" +
+        config.getNodeConfig(HDFSConstants.DATA_NODE_ID).getMaxHeap() + "m");
+
+    return envMap;
+  }
+```
 
 值得注意的是：**HDFS服务的设置是通过环境变量的方式设置的**，而不是.xml文件。这对配置管理以及应用访问造成了极大的不便，也导致无法和第三方HDFS管理工具进行集成，如Ambari和Cloudera Manager。同时，由于mesos-hdfs的设置到映射为真正HDFS的路径太长太复杂，对于运维和调试增加了很大的难度。
 RR
