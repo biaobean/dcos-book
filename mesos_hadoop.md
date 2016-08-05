@@ -128,7 +128,7 @@ marathon的[template](https://github.com/mesosphere/universe/blob/version-3.x/re
 
 ![](mesos/hdfs/marathon_config.png)
 
-在Executor启动时候都会通过[org.apache.mesos.hdfs.config.HdfsFrameworkConfig](https://github.com/mesosphere/hdfs/blob/master/hdfs-commons/src/main/java/org/apache/mesos/hdfs/config/HdfsFrameworkConfig.java)类来读取配置，其实现代码如下：
+在Executor启动时候都会通过*[org.apache.mesos.hdfs.config.HdfsFrameworkConfig](https://github.com/mesosphere/hdfs/blob/master/hdfs-commons/src/main/java/org/apache/mesos/hdfs/config/HdfsFrameworkConfig.java)*类来读取配置，其实现代码如下：
 ```java
   public HdfsFrameworkConfig() {
     // The path is configurable via the mesos.conf.path system property
@@ -142,8 +142,8 @@ marathon的[template](https://github.com/mesosphere/universe/blob/version-3.x/re
     setConf(configuration);
   }
 ```
-Executor的接口launchTask()负责启动真正干会儿的进程，实现在
-org.apache.mesos.hdfs.executor.AbstractNodeExecutor类中：
+Executor的接口*launchTask()*负责启动真正干会儿的进程，实现在
+*[org.apache.mesos.hdfs.executor.AbstractNodeExecutor](https://github.com/mesosphere/hdfs/blob/master/hdfs-commons/src/main/java/org/apache/mesos/hdfs/config/HdfsFrameworkConfig.java)*类中：
 
 ```java
   protected Process startProcess(ExecutorDriver driver, Task task) {
@@ -169,7 +169,7 @@ org.apache.mesos.hdfs.executor.AbstractNodeExecutor类中：
     return proc;
   }
 ```
-其中负责创建HDFS服务进程环境变量的createHdfsNodeEnvironment()函数实现如下：
+其中*createHdfsNodeEnvironment()*函数负责创建HDFS服务进程环境变量，实现如下：
 ```java
   private Map<String, String> createHdfsNodeEnvironment(Task task) {
     Map<String, String> envMap = new HashMap<>();
