@@ -94,7 +94,31 @@ resources {
 
 ![](mesos/hdfs/dn_web.png)
 
-### Hadoop设置
+### 设置
+#### 部署配置
+
+由于底层Mesos调度机制的支持，Mesos-hdfs部署可以有比物理直接部署hdsf有更灵活的规则，包括：
+
+* 资源预留
+
+在每一个需要预留资源的Slave服务器上，为mesos-HDFS服务角色指定相应的资源预留保证，如：
+```
+cpus(*):8;cpus(hdfs):4;mem(*):16384;mem(hdfs):8192 > /etc/mesos-slave/resources
+```
+
+* 资源约束
+
+通过设置*mesos.hdfs.constraints*参数，可以限制hdfs服务启动的节点。比如
+
+```xml
+<property>
+  <name>mesos.hdfs.constraints</name>
+  <value>zone:west,east;cpu:4;quality:optimized-disk;id:4</value>
+</property>
+```
+
+详细格式以及支持情况可以参见Mesos Constrainnts。
+#### HDFS参数配置
 
 HDFS中有很多配置，Mesosphere的HDFS项目是如何通过Mesos进行设置的呢？
 
@@ -143,7 +167,7 @@ marathon的[template](https://github.com/mesosphere/universe/blob/version-3.x/re
   }
 ```
 Executor的接口*launchTask()*负责启动真正干会儿的进程，实现在
-*[org.apache.mesos.hdfs.executor.AbstractNodeExecutor](https://github.com/mesosphere/hdfs/blob/master/hdfs-commons/src/main/java/org/apache/mesos/hdfs/config/HdfsFrameworkConfig.java)*类中：
+*[org.apache.mesos.hdfs.executor.AbstractNodeExecutor](https://github.com/mesosphere/hdfs/blob/master/hdfs-executor/src/main/java/org/apache/mesos/hdfs/executor/AbstractNodeExecutor.java)*类中：
 
 ```java
   protected Process startProcess(ExecutorDriver driver, Task task) {
@@ -169,7 +193,9 @@ Executor的接口*launchTask()*负责启动真正干会儿的进程，实现在
     return proc;
   }
 ```
+
 其中*createHdfsNodeEnvironment()*函数负责创建HDFS服务进程环境变量，实现如下：
+
 ```java
   private Map<String, String> createHdfsNodeEnvironment(Task task) {
     Map<String, String> envMap = new HashMap<>();
@@ -188,14 +214,31 @@ Executor的接口*launchTask()*负责启动真正干会儿的进程，实现在
   }
 ```
 
-值得注意的是：**HDFS服务的设置是通过环境变量的方式设置的**，而不是.xml文件。这对配置管理以及应用访问造成了极大的不便，也导致无法和第三方HDFS管理工具进行集成，如Ambari和Cloudera Manager。同时，由于mesos-hdfs的设置到映射为真正HDFS的路径太长太复杂，对于运维和调试增加了很大的难度。
-RR
-实际中DC/OS提供了hdfs子命令（项目地址），能够使用
+DC/OS的命令行还提供了hdfs子命令（项目地址），能够使用
 ```
 dcos hdfs ...
 ```
-的方式进行简单的HDFS操作，用户还需要安装DC/OS的命令行CLI就可以直接使用，无需关注具体HDFS
-的配置集合部署。但对于通过API编程的应用，没有简单的办法进行配置管理。
+的方式进行简单的HDFS操作。
+
+
+值得注意的是：**HDFS服务的设置是通过环境变量的方式设置的**，而不是.xml文件。这对配置管理以及应用访问造成了极大的不便，也导致无法和第三方HDFS管理工具进行集成，如Ambari和Cloudera Manager。同时，由于mesos-hdfs的设置到映射为真正HDFS的路径太长太复杂，对于运维和调试增加了很大的难度。
+RR
+实际中
+### 对比
+
+物理部署一个HDFS集群相比没使用Mesos-hdfs的好处在于：
+2.	1.	从部署角度说，将配置、库等打包放在universe上，用一条docker package命令就能安装，确实方便了很多。
+2.	支持contraint
+
+因此，短期内我不认为在Mesos上部署HDFS上
+3.	Hadoop的很多配置并不支持，如final等功能
+4.	数据 	788uJBOD存储方式
+5.	还是使用env方式
+
+，无需客户端关注具体HDFS的配置和部署。但对于通过API编程的应用，没有简单的办法进行配置管理
+
+
+
 
 ### 文件
 
