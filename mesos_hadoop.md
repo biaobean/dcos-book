@@ -10,7 +10,7 @@ github上有一个项目（[项目主页](https://github.com/mesos/hadoop))，�
 
 现在Mesos上开源的实现将所有的服务使用基于cgroups的容器封装，限制其CPU、内存和磁盘使用，比如NameNode的配额为使用0.5个CPU核，4.0GB内存以及最多10GB的磁盘空间：
 
-![](mesos/hdfs/nn_web.png)
+![](mesos/hdfs/task_nn_web.png)
 
 左边为Mesos Slave服务器要运行NameNode Executor总共分配的资源以及使用量，右边是NamNode任务实际需要的资源，可以看到少了一些资源，因为Executor自身也需要一定资源的，我们可以在Executor的运行日志中进行检验，可以stdout中有如下的输出：
 ```
@@ -1303,7 +1303,7 @@ HDFS_IMAGE_COMPRESSION_CODEC=org.apache.hadoop.io.compress.SnappyCodec
 ```
 
 ### YARN支持——Myraid
-Apache的孵化器中有个一个叫Myraid的项目([项目主页](http://myriad.incubator.apache.org))，用于将YARN运行在Mesos之上
+Apache的孵化器中有个一个叫Myraid的项目([项目主页](http://myriad.incubator.apache.org))，用于将YARN运行在Mesos之上，其原理是使用设计模式中的代理模式，启动独立的服务(进程)代理来自YARN的资源分配。
 ![](https://cwiki.apache.org/confluence/download/attachments/61312448/how-it-works2.png)
 
 ![](mesos/myriad/main.png)
@@ -1315,6 +1315,9 @@ Apache的孵化器中有个一个叫Myraid的项目([项目主页](http://myriad
 
 ![](mesos/myriad/flex.png)
 
+#### 总结
+
+但
 
 #### 配置文件
 ##### Marathon JSON文件示例
