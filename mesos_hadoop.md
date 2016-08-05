@@ -220,27 +220,25 @@ dcos hdfs ...
 ```
 的方式进行简单的HDFS操作。
 
-
-值得注意的是：**HDFS服务的设置是通过环境变量的方式设置的**，而不是.xml文件。这对配置管理以及应用访问造成了极大的不便，也导致无法和第三方HDFS管理工具进行集成，如Ambari和Cloudera Manager。同时，由于mesos-hdfs的设置到映射为真正HDFS的路径太长太复杂，对于运维和调试增加了很大的难度。
-RR
-实际中
 ### 对比
 
 物理部署一个HDFS集群相比没使用Mesos-hdfs的好处在于：
-2.	1.	从部署角度说，将配置、库等打包放在universe上，用一条docker package命令就能安装，确实方便了很多。
-2.	支持contraint
+1.	从部署角度说，将配置、库等打包放在universe上，用一条docker package命令就能安装，确实方便了很多。对于需要快速搭建一个有3个副本的小规模可靠存储场景，非常适合。
+2.	通过Marathon框架，能保证HDFS的各个服务示例的高可靠性，比如DataNode一直是3个。运行DataNode的服务器宕机后Marathon会在其他地方重新运行。
+3.	让HDFS与其框架共享资源，提高服务器利用率。（**注意：提高利用率不一定是提高效率**）
+4.	得益于底层Mesos支持contraints，能更加灵活的决定哪些类型的节点适合运行HDFS。
 
-因此，短期内我不认为在Mesos上部署HDFS上
-3.	Hadoop的很多配置并不支持，如final等功能
-4.	数据 	788uJBOD存储方式
-5.	还是使用env方式
+然而，在Mesos-hdfs的缺点也是显而易见的：
+1.	Hadoop的配置极其复杂，使用第三方的通用配置管理很难支持好。Mesos现在的配置管理还非常弱，很多还不能支持，比如final等功能。
+2.	HDFS的适合JBOD的硬件部署（请参见《Hadoop Opetation》），并需要相应配置，才能达到理想的性能。这个和机器真实的硬件环境相关，使用Mesos现在不能支持。
+3.	HDFS性能对于磁盘IO非常敏感，与其他框架共享资源后单纯的限制IO由于丧失了HDFS流式读写的优势，并不能保证HDFS的性能。
+4.	另外，从具体实现而言：**HDFS服务的设置是通过环境变量的方式设置的**，而不是.xml文件。这对配置管理以及应用访问造成了极大的不便，也导致无法和第三方HDFS管理工具进行集成，如Ambari和Cloudera Manager。
+5.	从使用而言，虽然部署平台的运维人员无需关注具体HDFS的配置和部署。但对于应用运维人员，使用通过API编程的应用，没有简单方便的办法能得到HDFS的配置，增加了这部分人员的工作量和出错概率。
+6.	从工程而言，由于mesos-hdfs的设置和管理到映射为真正HDFS的路径太长太复杂，对于运维和调试增加了很大的难度。而现在无论Mesos还是在Mesos-HDFS本身都尚未大量工程验证，因此，短期内我不认为在Mesos上部署HDFS在生产环境有实际的意义。
 
-，无需客户端关注具体HDFS的配置和部署。但对于通过API编程的应用，没有简单的办法进行配置管理
+### 文件路径
 
-
-
-
-### 文件
+如需下载相应的程序包和配置文件，请参见一下链接：
 
 https://github.com/mesosphere/universe/blob/version-3.x/repo/packages/H/hdfs/5/config.json
 
@@ -252,7 +250,7 @@ https://downloads.mesosphere.com/hdfs/assets/0.9.0-2.6.0/hadoop-2.6.0-cdh5.7.1-d
 
 https://downloads.mesosphere.com/hdfs/assets/0.9.0-2.6.0/executor.zip
 
-### 配置文件
+### 示例配置文件
 
 #### Config JSON配置
 ```
