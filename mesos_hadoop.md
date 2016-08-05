@@ -1303,7 +1303,7 @@ HDFS_IMAGE_COMPRESSION_CODEC=org.apache.hadoop.io.compress.SnappyCodec
 ```
 
 ### YARN支持——Myraid
-Apache的孵化器中有个一个叫Myraid的项目([项目主页](http://myriad.incubator.apache.org))，
+Apache的孵化器中有个一个叫Myraid的项目([项目主页](http://myriad.incubator.apache.org))，用于将YARN运行在Mesos之上
 ![](https://cwiki.apache.org/confluence/download/attachments/61312448/how-it-works2.png)
 
 ![](mesos/myriad/main.png)
