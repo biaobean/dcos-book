@@ -96,24 +96,6 @@ resources {
 
 ### Hadoop设置
 
-#### 指定部署约束
-
-Applying mesos slave constraints (Optional)
-
-In mesos-site.xml, add the configuration mesos.hdfs.constraints
-Set the value of configuration as ";" separated set of key:value pairs. Key and value has to be separated by the ":". Key represents the attribute name. Value can be exact match, less than or equal to, subset or value within the range for attribute of type text, scalar, set and range, respectively. For example:
-<property>
-  <name>mesos.hdfs.constraints</name>
-  <value>zone:west,east;cpu:4;quality:optimized-disk;id:4</value>
-</property>
-
-"zone" is type of set with members {"west","east"}.
-"cpu" is type of scalar. 
-"quality" is type of text. 
-"id" may be type of range. 
-
-#### HDFS参数配置
-
 HDFS中有很多配置，Mesosphere的HDFS项目是如何通过Mesos进行设置的呢？
 
 如果是“人肉”手工在Mesos上安装mesos-hdfs，设置是通过修改mesos-site.xml文件，参见[这里](https://github.com/mesosphere/hdfs/blob/master/README.md)。如果是使用package命令通过univese repo来自动安装，需要修改服务器上的config.json文件。
@@ -146,7 +128,7 @@ marathon的[template](https://github.com/mesosphere/universe/blob/version-3.x/re
 
 ![](mesos/hdfs/marathon_config.png)
 
-在启动Executor以及启动HDFS服务的时候会设置进程相应的环境变量，然后通过[org.apache.mesos.hdfs.config.HdfsFrameworkConfig](https://github.com/mesosphere/hdfs/blob/master/hdfs-commons/src/main/java/org/apache/mesos/hdfs/config/HdfsFrameworkConfig.java)类来读取所有配置到Java的Configuration对象中并在配置，其实现代码如下：
+在Executor启动时候都会通过[org.apache.mesos.hdfs.config.HdfsFrameworkConfig](https://github.com/mesosphere/hdfs/blob/master/hdfs-commons/src/main/java/org/apache/mesos/hdfs/config/HdfsFrameworkConfig.java)类来读取配置，其实现代码如下：
 ```java
   public HdfsFrameworkConfig() {
     // The path is configurable via the mesos.conf.path system property
@@ -160,70 +142,9 @@ marathon的[template](https://github.com/mesosphere/universe/blob/version-3.x/re
     setConf(configuration);
   }
 ```
-  protected Process startProcess(ExecutorDriver driver, Task task) {
-    log.info(String.format("Starting process: %s", task.getCmd()));
-    Process proc = task.getProcess();
-    reloadConfig();
-    if (proc == null) {
-      try {
-        Map<String, String> envMap = createHdfsNodeEnvironment(task);
 
-        Process process = ProcessUtil.startCmd(envMap, task.getCmd());
-        procWatcher.watch(process);
-        task.setProcess(process);
-      } catch (IOException e) {
-        log.error("Unable to start process:", e);
-        task.getProcess().destroy();
-        sendTaskFailed(driver, task);
-      }
-    } else {
-      log.error("Tried to start process, but process already running");
-    }
-
-    return proc;
-  }
-
-  private Map<String, String> createHdfsNodeEnvironment(Task task) {
-    Map<String, String> envMap = new HashMap<>();
-    NodeConfig nodeConfig = config.getNodeConfig(task.getType());
-
-    envMap.put("HADOOP_HEAPSIZE", String.format("%d", nodeConfig.getMaxHeap()));
-    envMap.put("HADOOP_OPTS", config.getJvmOpts());
-    envMap.put("HADOOP_NAMENODE_OPTS",
-      "-Xmx" + config.getNodeConfig(HDFSConstants.NAME_NODE_ID).getMaxHeap() + "m -Xms" +
-        config.getNodeConfig(HDFSConstants.NAME_NODE_ID).getMaxHeap() + "m");
-    envMap.put("HADOOP_DATANODE_OPTS",
-      "-Xmx" + config.getNodeConfig(HDFSConstants.DATA_NODE_ID).getMaxHeap() + "m -Xms" +
-        config.getNodeConfig(HDFSConstants.DATA_NODE_ID).getMaxHeap() + "m");
-
-    return envMap;
-  }
-
-org.apache.mesos.process.ProcessUtil
-```
-public class ProcessUtil {
-  ...
-  public static Process startCmd(Map<String, String> envMap, String... cmd) throws IOException {
-    LOG.info(String.format("Starting process: %s", Arrays.asList(cmd)));
-    ProcessBuilder processBuilder = new ProcessBuilder(cmd);
-    setEnvironment(envMap, processBuilder);
-    Process process = processBuilder.start();
-    StreamUtil.redirectProcess(process);
-    return process;
-  }
-
-  private static void setEnvironment(Map<String, String> envMap, ProcessBuilder processBuilder) {
-    if (envMap != null && CollectionUtils.isNotEmpty(envMap.keySet())) {
-      for (Map.Entry<String, String> env : envMap.entrySet()) {
-        processBuilder.environment().put(env.getKey(), env.getValue());
-      }
-    }
-  }
-}
-```
-
-值得注意的是：**HDFS服务的设置是通过环境变量的方式设置的**，而不是.xml文件。这对配置管理以及应用访问造成了极大的不便。同时，由于mesos-hdfs的设置到映射为真正HDFS的路径太长太复杂，对于运维和调试增加和恨到的难度。
-
+值得注意的是：**HDFS服务的设置是通过环境变量的方式设置的**，而不是.xml文件。这对配置管理以及应用访问造成了极大的不便，也导致无法和第三方HDFS管理工具进行集成，如Ambari和Cloudera Manager。同时，由于mesos-hdfs的设置到映射为真正HDFS的路径太长太复杂，对于运维和调试增加了很大的难度。
+RR
 实际中DC/OS提供了hdfs子命令（项目地址），能够使用
 ```
 dcos hdfs ...
