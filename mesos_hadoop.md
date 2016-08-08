@@ -6,6 +6,10 @@ github上有一个项目（[项目主页](https://github.com/mesos/hadoop))，�
 ## HDFS
 现在Mesos DC/OS的仓库中提供了一个HDFS的包，其项目([项目主页](https://github.com/mesosphere/hdfs))实现源自Brenden Matthews，用于在DC/OS上一键启动一个“标准化”的HDFS服务，其中包括2个NameNode（和相应的DFSZKFailoverController服务），3个JournalNode，其他的为DataNode，缺省实现为3个DataNode，如下图：
 
+![](mesos/hdfs/instants.png)
+
+启动后Mesos上的Task页面如下：
+
 ![](mesos/hdfs/mesos_hdfs_web.png)
 
 现在Mesos上开源的实现将所有的服务使用基于cgroups的容器封装，限制其CPU、内存和磁盘使用，比如NameNode的配额为使用0.5个CPU核，4.0GB内存以及最多10GB的磁盘空间：
