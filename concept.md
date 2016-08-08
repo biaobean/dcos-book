@@ -1,14 +1,11 @@
 # DC/OS概念
 
-DC/OS是Data Center Operation System的缩写，首次出现自2011年Matei Zaharia等的论文《[The Datacenter Needs an Operating System](http://dl.acm.org/citation.cfm?id=2170461)》，
-
-“Sixty-four cores or 128 cores on a single chip looks a lot like 64 machines or 128 machines in a data center”“We wanted people to be able to program for the data center just like they program for their laptop.”
-
-灵感也许来自于2009年Google的一篇文章《The Datacenter as a Computer》（2011年出了[第二版](http://web.eecs.umich.edu/~mosharaf/Readings/DC-Computer.pdf)），IaaC Infrastructure as a computer 其目的是让用户就像使用一个现代操作系统来管理单个计算机一样，将数据中心抽象为逻辑上的一台计算机，屏蔽掉底层的细节，并提供一个友好的界面供管理和使用。
+DC/OS是Data Center Operation System的缩写，以前的简称为DCOS，后来为了防止被读作[di'k^s]，在中间加了一个斜线。首次出现自2011年Matei Zaharia等的论文《[The Datacenter Needs an Operating System](http://dl.acm.org/citation.cfm?id=2170461)》：
 
 > By datacenter OS, we mean a software stack providing functionality for the overall datacenter that is analogous to what a traditional OS provides on one machine. We are not calling for a new host OS to be run in datacenters, though such a change may also prove beneficial.
 
-以前的简称为DCOS，后来为了防止被读作[di'k^s]，在中间加了一个斜线。
+该论文的第一作者Matei Zaharia后来创办了DataBricks致力于Spark的推广和服务，第二作者	Benjamin Hindman去了Mesosphere用于提供在Mesos上的商业产品和服务。他们在当时提出了一个愿景，希望能够像现在在桌面系统上开发程序一样为数据中心编程。他们提出的愿景是希望在数据中心上的编程就像在桌面操作系统。这个灵感也许来自于2009年Google的一篇文章《The Datacenter as a Computer》（2011年出了[第二版](http://web.eecs.umich.edu/~mosharaf/Readings/DC-Computer.pdf)），也就是现在流行的IaaC（Infrastructure as a computer）概念，认为在数据中心里的64台或者128台服务器就好比是一个处理器上的64个或者128个核，希望能让用户就像使用一个现代操作系统来管理单个计算机一样，将数据中心抽象为逻辑上的一台计算机，屏蔽掉底层的细节，并提供一个友好的界面供管理和使用。
+
 ## DC/OS的功能
 
 既然叫OS，那功能和我们熟悉的单机OS应该非常类似。因此我们从通用操作系统的功能出发，对DC/OS提出要求。通常开源社区中很多不同组件都能实现部分集群功能，值得注意的是，**DC/OS不应该只是一堆组件的堆积和组合，也不应该只是文档描述的解决方案，而是集成各个功能组件以后，并在其之上屏蔽组件细节的整套一站式服务的管理软件。**
