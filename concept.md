@@ -1,4 +1,4 @@
-# DC/OS概念
+#2 DC/OS概念
 
 DC/OS是Data Center Operation System的缩写，以前的简称为DCOS，后来为了防止被读作[di'k^s]，在中间加了一个斜线。首次出现自2011年Matei Zaharia等的论文《[The Datacenter Needs an Operating System](http://dl.acm.org/citation.cfm?id=2170461)》：
 
