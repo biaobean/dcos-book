@@ -1,4 +1,4 @@
-# 4.1 Mesos DC/OS
+# Mesos DC/OS
 
 
 ## 架构
